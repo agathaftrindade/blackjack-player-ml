@@ -1,7 +1,7 @@
 from enum import Enum, auto
 
-import game_params
-from deck import CARD, create_deck, calculate_points
+from blackjack_engine import game_params
+from blackjack_engine.deck import CARD, create_deck, calculate_points
 
 class ACTION(Enum):
     HIT = auto()
@@ -16,7 +16,6 @@ class Match():
         self.player = {'cards': [], 'finished': False}
         self.dealer = {'cards': [], 'finished': False}
         self.player_surrendered = False
-        self.game_finished = True
         
         for _ in range(2):
             self.player['cards'].append(self.draw_card())
@@ -77,30 +76,3 @@ class Match():
         if dealer_points == player_points:
             return 'draw'
         return 'player'
-        
-if __name__ == '__main__':
-    print('-----New Match-----')
-    match = Match()
-    print('player_cards:', match.player['cards'], '=>', calculate_points(match.player['cards']))
-    print('player_cards:', match.dealer['cards'], '=>', calculate_points(match.dealer['cards']))
-    print()
-    
-    from random import choice
-
-    winner = ''
-    while not winner:
-        if not match.player['finished']:
-            act = choice([ACTION.HIT, ACTION.STAND])
-            print('Player', 'hits' if act == ACTION.HIT else 'stands')
-            match.play_player_turn(act)
-        else:
-            act = match.play_dealer_turn()
-            print('Dealer', 'hits' if act == ACTION.HIT else 'stands')
-
-        print('player_cards:', match.player['cards'], '=>', calculate_points(match.player['cards']))
-        print('player_cards:', match.dealer['cards'], '=>', calculate_points(match.dealer['cards']))
-        print()
-        winner = match.get_winner()
-
-    print('winner:', match.get_winner())
-    print('-----Match Ended-----')

@@ -1,0 +1,2 @@
+class ReinforcementLearningPlayer:
+    pass

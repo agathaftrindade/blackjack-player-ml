@@ -2,7 +2,7 @@ from enum import Enum, auto
 from random import shuffle
 from collections import deque
 
-import game_params
+from blackjack_engine import game_params
 
 class CARD(Enum):
     ACE = auto()
