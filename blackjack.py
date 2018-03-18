@@ -2,16 +2,17 @@ from blackjack_engine.match import Match, ACTION
 from blackjack_engine.deck import calculate_points
 
 from blackjack_player.random_player import RandomPlayer
+from blackjack_player.reinforcement_learning_player import ReinforcementLearningPlayer
 
-MAX_ITERATIONS = 1000
+MAX_ITERATIONS = 20
 
 def play_match(player):
-    # print('-----New Match-----')
+    print('-----New Match-----')
 
     match = Match()
-    # print('player_cards:', match.player['cards'], '=>', calculate_points(match.player['cards']))
-    # print('player_cards:', match.dealer['cards'], '=>', calculate_points(match.dealer['cards']))
-    # print()
+    print('player_cards:', match.player['cards'], '=>', calculate_points(match.player['cards']))
+    print('dealer_cards:', match.dealer['cards'], '=>', calculate_points(match.dealer['cards']))
+    print()
     winner = ''
     while not winner:
         if not match.player['finished']:
@@ -20,22 +21,22 @@ def play_match(player):
                 'dealer_cards': match.dealer['cards'][0]
             }
             act = player.play(match_state)
-            # print('Player', 'hits' if act == ACTION.HIT else 'stands')
+            print('Player', 'hits' if act == ACTION.HIT else 'stands')
             match.play_player_turn(act)
         else:
             act = match.play_dealer_turn()
-            # print('Dealer', 'hits' if act == ACTION.HIT else 'stands')
-        # print('player_cards:', match.player['cards'], '=>', calculate_points(match.player['cards']))
-        # print('player_cards:', match.dealer['cards'], '=>', calculate_points(match.dealer['cards']))
-        # print()
+            print('Dealer', 'hits' if act == ACTION.HIT else 'stands')
+        print('player_cards:', match.player['cards'], '=>', calculate_points(match.player['cards']))
+        print('dealer_cards:', match.dealer['cards'], '=>', calculate_points(match.dealer['cards']))
+        print()
         winner = match.get_winner()
-    # print('winner:', match.get_winner())
-    # print('-----Match Ended-----')
+    print('winner:', match.get_winner())
+    print('-----Match Ended-----')
     return winner
 
 def test_player(player):
-    stats = {}
-    for i in range(MAX_ITERATIONS):
+    stats = {'dealer' : 0, 'player' : 0, 'draw' : 0}
+    for _ in range(MAX_ITERATIONS):
         r = play_match(player)
 
         stats[r] = stats.get(r, 0)
@@ -49,5 +50,11 @@ def print_stats(stats):
 
 if __name__ == '__main__':
     print('Testing RandomPlayer')
-    stats = test_player(RandomPlayer)
+    stats = test_player(RandomPlayer())
     print_stats(stats)
+
+    # print('Testing ReinforcementPlayer')
+    # player = ReinforcementLearningPlayer()
+    # player.train()
+    # stats = test_player(player)
+    # print_stats(stats)
