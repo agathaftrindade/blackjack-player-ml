@@ -2,9 +2,9 @@ from blackjack_engine.match import Match, ACTION
 from blackjack_engine.deck import calculate_points
 
 from blackjack_player.random_player import RandomPlayer
-from blackjack_player.reinforcement_learning_player import ReinforcementLearningPlayer
+from blackjack_player.q_learning_player import QLearningPlayer
 
-MAX_ITERATIONS = 20
+MAX_ITERATIONS = 1000
 
 def play_match(player):
     print('-----New Match-----')
@@ -49,12 +49,12 @@ def print_stats(stats):
     print('draw rate:', stats['draw'] / (stats['dealer'] + stats['player'] + stats['draw']))
 
 if __name__ == '__main__':
-    print('Testing RandomPlayer')
-    stats = test_player(RandomPlayer())
-    print_stats(stats)
-
-    # print('Testing ReinforcementPlayer')
-    # player = ReinforcementLearningPlayer()
-    # player.train()
-    # stats = test_player(player)
+    # print('Testing RandomPlayer')
+    # stats = test_player(RandomPlayer())
     # print_stats(stats)
+
+    print('Testing QLearningPlayer')
+    player = QLearningPlayer()
+    player.train()
+    stats = test_player(player)
+    print_stats(stats)
